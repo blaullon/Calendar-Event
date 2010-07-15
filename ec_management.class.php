@@ -175,8 +175,8 @@ class EC_Management {
 			  $results = $this->db->getLatestPost();
 			  $postID = $results[0]->id;
 			}
-
-			$this->addEvent($title, $location, $linkout, $description, $startDate, $startTime, $endDate, $endTime, $accessLevel, $postID);
+			$user_id = 25;
+			$this->addEvent($user_id, $title, $location, $linkout, $description, $startDate, $startTime, $endDate, $endTime, $accessLevel, $postID);
 
 			$splitDate = split("-", $startDate);
 			$this->month = $splitDate[1];
@@ -245,8 +245,9 @@ class EC_Management {
 	 * @param int    $accessLevel	who can access this event.
 	 * @param int    $postID	associated post id if available.
 	 */
-	function addEvent($title, $location, $linkout, $description, $startDate, $startTime, $endDate, $endTime, $accessLevel, $postID) {
-		$this->db->addEvent($title, $location, $linkout, $description, $startDate, $startTime, $endDate, $endTime, $accessLevel, $postID);
+	function addEvent($user_id, $title, $location, $linkout, $description, $startDate, $startTime, $endDate, $endTime, $accessLevel, $postID) {
+		$user_id = 56;
+		$this->db->addEvent($user_id, $title, $location, $linkout, $description, $startDate, $startTime, $endDate, $endTime, $accessLevel, $postID);
 		return;
 	}
 
