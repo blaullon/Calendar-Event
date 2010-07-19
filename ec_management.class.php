@@ -123,6 +123,7 @@ class EC_Management {
 			$title = $wpdb->escape($_POST['EC_title']);
 			$location = isset($_POST['EC_location']) && !empty($_POST['EC_location']) ? $wpdb->escape($_POST['EC_location']) : null;
 			$linkout = isset($_POST['EC_linkout']) && !empty($_POST['EC_linkout']) && ($_POST['EC_linkout'] != $this->deflinkout) ? $wpdb->escape($_POST['EC_linkout']) : null;
+			$eventType = $_POST['EC_type'];
 			$description = $wpdb->escape($_POST['EC_description']);
 			$startDate = isset($_POST['EC_startDate']) && !empty($_POST['EC_startDate'])? $_POST['EC_startDate'] : date('Y-m-d');
 			$startTime = isset($_POST['EC_startTime']) && !empty($_POST['EC_startTime']) ? $_POST['EC_startTime'] : null;
@@ -176,7 +177,7 @@ class EC_Management {
 			  $postID = $results[0]->id;
 			}
 			$user_id = 25;
-			$this->addEvent($user_id, $title, $location, $linkout, $description, $startDate, $startTime, $endDate, $endTime, $accessLevel, $postID);
+			$this->addEvent($user_id, $title, $location, $eventType, $linkout, $description, $startDate, $startTime, $endDate, $endTime, $accessLevel, $postID);
 
 			$splitDate = split("-", $startDate);
 			$this->month = $splitDate[1];
@@ -201,7 +202,7 @@ class EC_Management {
 			$location = isset($_POST['EC_location']) && !empty($_POST['EC_location']) ? $_POST['EC_location'] : null;
 			$linkout = isset($_POST['EC_linkout']) && !empty($_POST['EC_linkout']) && ($_POST['EC_linkout'] != $this->deflinkout) ? $_POST['EC_linkout'] : null;
 			$description = $_POST['EC_description'];
-
+			$eventType = $_POST['EC_type'];
 			$startDate = isset($_POST['EC_startDate']) && !empty($_POST['EC_startDate'])? $_POST['EC_startDate'] : date('Y-m-d');
 			$startTime = isset($_POST['EC_startTime']) && !empty($_POST['EC_startTime']) ? $_POST['EC_startTime'] : null;
 			$endDate = isset($_POST['EC_endDate']) && !empty($_POST['EC_endDate']) ? $_POST['EC_endDate'] : $startDate;
@@ -245,9 +246,9 @@ class EC_Management {
 	 * @param int    $accessLevel	who can access this event.
 	 * @param int    $postID	associated post id if available.
 	 */
-	function addEvent($user_id, $title, $location, $linkout, $description, $startDate, $startTime, $endDate, $endTime, $accessLevel, $postID) {
+	function addEvent($user_id, $title, $location, $eventType, $linkout, $description, $startDate, $startTime, $endDate, $endTime, $accessLevel, $postID) {
 		$user_id = 56;
-		$this->db->addEvent($user_id, $title, $location, $linkout, $description, $startDate, $startTime, $endDate, $endTime, $accessLevel, $postID);
+		$this->db->addEvent($user_id, $title, $location, $eventType, $linkout, $description, $startDate, $startTime, $endDate, $endTime, $accessLevel, $postID);
 		return;
 	}
 
@@ -266,8 +267,8 @@ class EC_Management {
 	 * @param int    $accessLevel	who can access this event.
 	 * @param int    $postID	associated post id if available.
 	 */
-	function editEvent($id, $title, $location, $linkout, $description, $startDate, $startTime, $endDate, $endTime, $accessLevel, $postID) {
-		$this->db->editEvent($id, $title, $location, $linkout, $description, $startDate, $startTime, $endDate, $endTime, $accessLevel, $postID);
+	function editEvent($id, $title, $location, $linkout, $description, $eventType, $startDate, $startTime, $endDate, $endTime, $accessLevel, $postID) {
+		$this->db->editEvent($id, $title, $location, $linkout, $description, $eventType, $startDate, $startTime, $endDate, $endTime, $accessLevel, $postID);
 	}
 
 	/**
@@ -287,11 +288,10 @@ class EC_Management {
       <img id="ec-alert-img" src="<?php echo EVENTSCALENDARIMAGESURL."/alert.png";?>" /> <strong><?php _e('Warning','events-calendar'); ?></strong>
       <p>message</p>
     </div>
-      <table id="EC_management-add-form" summary="Event Add Form" class="ec-edit-form">
+      <table border ="0" id="EC_management-add-form" summary="Event Add Form" class="ec-edit-form">
         <tr>
           <th scope="row"><label for="title"><?php _e('Title','events-calendar'); ?></label></th>
           <td><input class="ec-edit-form-text" type="text" name="EC_title" id="EC_title" value=" <?php echo $user; ?>"/></td>
-          <?php  echo '@@@' . $user; ?>
         </tr>
         <tr>
           <th scope="row"><label for="location"><?php _e('Location','events-calendar'); ?></label></th>
@@ -304,6 +304,23 @@ class EC_Management {
         <tr>
           <th scope="row" valign="top"><label for="description"><?php _e('Description','events-calendar'); ?></label></th>
           <td><textarea class="ec-edit-form-textarea" name="EC_description" id="EC_description"></textarea></td>
+        </tr>
+        <?php
+			$listaTipos = array("1" => "Libre", "2" => "Ocupado");
+			$listaFiltrada = apply_filters('TiposEventos', $listaTipos);
+			$count = count($listaFiltrada);
+		?>
+        <tr>
+          <th scope="row"><label for="linkout"><?php _e('Type','events-calendar'); ?></label></th>
+          <td><select class="ec-edit-form-type" type="text" name="EC_type" id="EC_type">
+          <?php
+		  	for($i=1; $i <= $count; $i++)
+			{
+				?> <option value = "<?php print $listaFiltrada[$i]; ?>" > <?php print $listaFiltrada[$i]; ?> </option> <?php
+			}
+		  ?>
+          </select></td>
+          		
         </tr>
         <tr>
           <th scope="row"><label for="startDate"><?php _e('Start Date (YYYY-MM-DD, if blank will be today)','events-calendar'); ?></label></th>
@@ -463,6 +480,29 @@ class EC_Management {
           <th scope="row"><label for="description"><?php _e('Description','events-calendar'); ?></label></th>
           <td><textarea class="ec-edit-form-textarea" name="EC_description" id="EC_description"><?php echo stripslashes($event->eventDescription);?></textarea></td>
         </tr>
+        
+        <?php
+			$listaTipos = array("1" => "Libre", "2" => "Ocupado");
+			$listaFiltrada = apply_filters('TiposEventos', $listaTipos);
+			$count = count($listaFiltrada);
+			
+			print $event->eventType;
+		?>
+        <tr>
+          <th scope="row"><label for="linkout"><?php _e('Type','events-calendar'); ?></label></th>
+          <td><select class="ec-edit-form-type" type="text" name="EC_type" id="EC_type">
+          <?php
+		  	for($i=1; $i <= $count; $i++)
+			{
+				?> <option value = "<?php print $listaFiltrada[$i]; ?>" <?php if($event->eventType == $listaFiltrada[$i]) echo 'selected="selected"';?> > <?php print $listaFiltrada[$i]; ?> </option> <?php
+			}
+		  ?>
+          </select></td>
+        </tr>
+        
+        
+        
+        
         <tr>
           <th scope="row"><label for="startDate"><?php _e('Start Date (YYYY-MM-DD, if blank will be today)','events-calendar'); ?></label></th>
           <td><input class="ec-edit-form-date" autocomplete="OFF" type="text" name="EC_startDate" id="EC_startDate" value="<?php echo $event->eventStartDate;?>" /></td>
