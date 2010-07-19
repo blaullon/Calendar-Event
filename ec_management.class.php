@@ -306,9 +306,16 @@ class EC_Management {
           <td><textarea class="ec-edit-form-textarea" name="EC_description" id="EC_description"></textarea></td>
         </tr>
         <?php
-			$listaTipos = array("1" => "Libre", "2" => "Ocupado");
-			$listaFiltrada = apply_filters('TiposEventos', $listaTipos);
-			$count = count($listaFiltrada);
+		
+		function filteredList($filtList)
+		{
+			$filrList = array("1" => "Libre", "2" => "Ocupado");
+			return $filrList;
+		}
+		
+			$filterList = apply_filters('EC_TiposEventos', array());
+			$filterList = filteredList($filterList);
+			$count = count($filterList);
 		?>
         <tr>
           <th scope="row"><label for="linkout"><?php _e('Type','events-calendar'); ?></label></th>
@@ -316,7 +323,7 @@ class EC_Management {
           <?php
 		  	for($i=1; $i <= $count; $i++)
 			{
-				?> <option value = "<?php print $listaFiltrada[$i]; ?>" > <?php print $listaFiltrada[$i]; ?> </option> <?php
+				?> <option value = "<?php print $filterList[$i]; ?>" > <?php print $filterList[$i]; ?> </option> <?php
 			}
 		  ?>
           </select></td>
@@ -482,11 +489,15 @@ class EC_Management {
         </tr>
         
         <?php
-			$listaTipos = array("1" => "Libre", "2" => "Ocupado");
-			$listaFiltrada = apply_filters('TiposEventos', $listaTipos);
-			$count = count($listaFiltrada);
-			
-			print $event->eventType;
+			function filteredList($filtList)
+		{
+			$filrList = array("1" => "Libre", "2" => "Ocupado");
+			return $filrList;
+		}
+		
+			$filterList = apply_filters('EC_TiposEventos', array());
+			$filterList = filteredList($filterList);
+			$count = count($filterList);
 		?>
         <tr>
           <th scope="row"><label for="linkout"><?php _e('Type','events-calendar'); ?></label></th>
@@ -494,7 +505,7 @@ class EC_Management {
           <?php
 		  	for($i=1; $i <= $count; $i++)
 			{
-				?> <option value = "<?php print $listaFiltrada[$i]; ?>" <?php if($event->eventType == $listaFiltrada[$i]) echo 'selected="selected"';?> > <?php print $listaFiltrada[$i]; ?> </option> <?php
+				?> <option value = "<?php print $filterList[$i]; ?>" <?php if($event->eventType == $filterList[$i]) echo 'selected="selected"';?> > <?php print $filterList[$i]; ?> </option> <?php
 			}
 		  ?>
           </select></td>
