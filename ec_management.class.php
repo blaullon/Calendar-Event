@@ -307,23 +307,17 @@ class EC_Management {
         </tr>
         <?php
 		
-		function filteredList($filtList)
-		{
-			$filrList = array("1" => "Libre", "2" => "Ocupado");
-			return $filrList;
-		}
-		
-			$filterList = apply_filters('EC_TiposEventos', array());
-			$filterList = filteredList($filterList);
+			$filterList = apply_filters('EC_EventsTypes', array());
 			$count = count($filterList);
+			print $count;
 		?>
         <tr>
           <th scope="row"><label for="linkout"><?php _e('Type','events-calendar'); ?></label></th>
           <td><select class="ec-edit-form-type" type="text" name="EC_type" id="EC_type">
           <?php
-		  	for($i=1; $i <= $count; $i++)
+		  	foreach ($filterList as $keyfL => $fL) 
 			{
-				?> <option value = "<?php print $filterList[$i]; ?>" > <?php print $filterList[$i]; ?> </option> <?php
+    			?> <option value = "<?php print $keyfL; ?>" > <?php print $fL; ?> </option> <?php
 			}
 		  ?>
           </select></td>
@@ -489,23 +483,27 @@ class EC_Management {
         </tr>
         
         <?php
-			function filteredList($filtList)
-		{
-			$filrList = array("1" => "Libre", "2" => "Ocupado");
-			return $filrList;
-		}
-		
-			$filterList = apply_filters('EC_TiposEventos', array());
-			$filterList = filteredList($filterList);
+				
+			$filterList = apply_filters('EC_EventsTypes', array());
+			//$filterList = completeArray();
 			$count = count($filterList);
+			print $count;
+			print $event->eventType;
+			foreach ($filterList as $keyfL => $fL) 
+			{ print $keyfL; }
 		?>
         <tr>
           <th scope="row"><label for="linkout"><?php _e('Type','events-calendar'); ?></label></th>
           <td><select class="ec-edit-form-type" type="text" name="EC_type" id="EC_type">
           <?php
-		  	for($i=1; $i <= $count; $i++)
+		  	/*for($i=1; $i <= $count; $i++)
 			{
 				?> <option value = "<?php print $filterList[$i]; ?>" <?php if($event->eventType == $filterList[$i]) echo 'selected="selected"';?> > <?php print $filterList[$i]; ?> </option> <?php
+			}*/
+			print $event->eventType;
+			foreach ($filterList as $keyfL => $fL) 
+			{
+    			?> <option value = "<?php print $keyfL; ?>" <?php if($event->eventType == $keyfL) echo 'selected="selected"';?> > <?php print $fL; ?> </option> <?php
 			}
 		  ?>
           </select></td>
