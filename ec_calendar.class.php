@@ -542,7 +542,7 @@ EOHTML;
 		// remaining "empty" days
 		if ($weekday != 7)
 			$calendar .= '<td colspan="'.(7-$weekday).'" class="pad">&nbsp;</td>';
-echo '@@@' . $current_user;;
+			
 		echo $calendar.'</tr></tbody></table>'."\n";
 	}
 }

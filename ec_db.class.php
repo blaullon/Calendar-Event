@@ -117,8 +117,10 @@ class EC_DB {
 		if ($this->db->get_var("show tables like '$this->mainTable'") != $this->mainTable ) {
 			$sql = "CREATE TABLE " . $this->mainTable . " (
 				id mediumint(9) NOT NULL AUTO_INCREMENT,
+				user_id mediumint(9) NOT NULL,
 				eventTitle varchar(255) CHARACTER SET utf8 NOT NULL,
 				eventDescription text CHARACTER SET utf8 NOT NULL,
+				eventType varchar(255) CHARACTER SET utf8 default NULL, 
 				eventLocation varchar(255) CHARACTER SET utf8 default NULL,
 				eventLinkout varchar(255) CHARACTER SET utf8 default NULL,
 				eventStartDate date NOT NULL,
@@ -146,8 +148,10 @@ class EC_DB {
 		if ($installed_ver != $this->dbVersion) {
 			$sql = "CREATE TABLE " . $this->mainTable . " (
 				id mediumint(9) NOT NULL AUTO_INCREMENT,
+				user_id mediumint(9) NOT NULL,
 				eventTitle varchar(255) CHARACTER SET utf8 NOT NULL,
 				eventDescription text CHARACTER SET utf8 NOT NULL,
+				eventType varchar(255) CHARACTER SET utf8 default NULL,
 				eventLocation varchar(255) CHARACTER SET utf8 default NULL,
 				eventLinkout varchar(255) CHARACTER SET utf8 default NULL,
 				eventStartDate date NOT NULL,
@@ -213,6 +217,8 @@ class EC_DB {
 	 * Adds a new event into database.
 	 *
 	 * @param int 		$id 			the event id
+	 * @param int       $user_id  		id del usuario que creo el evento
+	 * @param string    $typeEvent 		tipo de Evento
 	 * @param string 	$title 			the event title
 	 * @param string 	$location 		the event location
 	 * @param string 	$linkout 		URL to an external web site
@@ -224,7 +230,7 @@ class EC_DB {
 	 * @param int 		$accessLevel 		who has access to this event
 	 * @param int 		$postId 		post id if use activated it
 	 */
-	function addEvent($title, $location, $linkout, $description, $startDate, $startTime, $endDate, $endTime, $accessLevel, $postID) {
+	function addEvent($user_id, $title, $location, $eventType, $linkout, $description, $startDate, $startTime, $endDate, $endTime, $accessLevel, $postID) {
 		$postID = is_null($postID) ? "NULL" : "'$postID'";
 		$location = is_null($location) ? "NULL" : "'$location'";
 		$description = is_null($description) ? "NULL" : "'$description'";
@@ -236,9 +242,9 @@ class EC_DB {
 		$endTime = is_null($endTime) ? "NULL" : "'$endTime'";
 
 		$sql = "INSERT INTO `$this->mainTable` ("
-			 ."`id`, `eventTitle`, `eventDescription`, `eventLocation`, `eventLinkout`,`eventStartDate`, `eventStartTime`, `eventEndDate`, `eventEndTime`, `accessLevel`, `postID`) "
+			 ."`id`, `user_id`, `eventType`, `eventTitle`, `eventDescription`, `eventLocation`, `eventLinkout`,`eventStartDate`, `eventStartTime`, `eventEndDate`, `eventEndTime`, `accessLevel`, `postID`) "
 			 ."VALUES ("
-			 ."NULL , '$title', $description, $location, $linkout, $startDate, $startTime, $endDate, $endTime , $accessLevel, $postID);";
+			 ."NULL , '$user_id', '$eventType', '$title', $description, $location, $linkout, $startDate, $startTime, $endDate, $endTime , $accessLevel, $postID);";
 
 		$this->db->query($sql);
 	}
@@ -247,6 +253,7 @@ class EC_DB {
 	 * Updates an already existing event.
 	 *
 	 * @param int 		$id 			the event id
+	 * @param int       $user_id  		id del usuario que creo el evento
 	 * @param string 	$title 			the event title
 	 * @param string 	$location 		the event location
 	 * @param string 	$linkout 		URL to an external web site
@@ -258,7 +265,7 @@ class EC_DB {
 	 * @param int 		$accessLevel 		who can access this event
 	 * @param int 		$postId 		post id if use activated it
 	 */
-	function editEvent($id, $title, $location, $linkout, $description, $startDate, $startTime, $endDate, $endTime, $accessLevel, $postID) {
+	function editEvent($id, $title, $location, $linkout, $description, $eventType, $startDate, $startTime, $endDate, $endTime, $accessLevel, $postID) {
 
 		// just to make sure
 		if (empty($id))
@@ -278,7 +285,9 @@ class EC_DB {
 
 		$sql = "UPDATE `$this->mainTable` SET "
 			."`eventTitle` = '$title', "
+			."`user_id` = '$user_id', "
 			."`eventDescription` = $description, "
+			."`eventType` = $eventType, "
 			."`eventLocation` = $location, "
 			."`eventLinkout` = $linkout, "
 			."`eventStartDate` = $startDate, "
