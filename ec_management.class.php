@@ -305,11 +305,8 @@ class EC_Management {
           <th scope="row" valign="top"><label for="description"><?php _e('Description','events-calendar'); ?></label></th>
           <td><textarea class="ec-edit-form-textarea" name="EC_description" id="EC_description"></textarea></td>
         </tr>
-        <?php
-		
+        <?phP
 			$filterList = apply_filters('EC_EventsTypes', array());
-			$count = count($filterList);
-			print $count;
 		?>
         <tr>
           <th scope="row"><label for="linkout"><?php _e('Type','events-calendar'); ?></label></th>
@@ -485,22 +482,12 @@ class EC_Management {
         <?php
 				
 			$filterList = apply_filters('EC_EventsTypes', array());
-			//$filterList = completeArray();
-			$count = count($filterList);
-			print $count;
-			print $event->eventType;
-			foreach ($filterList as $keyfL => $fL) 
-			{ print $keyfL; }
 		?>
         <tr>
           <th scope="row"><label for="linkout"><?php _e('Type','events-calendar'); ?></label></th>
           <td><select class="ec-edit-form-type" type="text" name="EC_type" id="EC_type">
           <?php
-		  	/*for($i=1; $i <= $count; $i++)
-			{
-				?> <option value = "<?php print $filterList[$i]; ?>" <?php if($event->eventType == $filterList[$i]) echo 'selected="selected"';?> > <?php print $filterList[$i]; ?> </option> <?php
-			}*/
-			print $event->eventType;
+		  	
 			foreach ($filterList as $keyfL => $fL) 
 			{
     			?> <option value = "<?php print $keyfL; ?>" <?php if($event->eventType == $keyfL) echo 'selected="selected"';?> > <?php print $fL; ?> </option> <?php
@@ -508,9 +495,6 @@ class EC_Management {
 		  ?>
           </select></td>
         </tr>
-        
-        
-        
         
         <tr>
           <th scope="row"><label for="startDate"><?php _e('Start Date (YYYY-MM-DD, if blank will be today)','events-calendar'); ?></label></th>
