@@ -61,7 +61,7 @@ function ec_show_events_calendar_html(){
 		$year = $_GET['EC_action'] == 'switchMonth' ? (int)$_GET['EC_year'] : date('Y');
 	}
 
-	$calendar->displayWidget($year, $month);
+	$calendar->displayLarge($year, $month);
 }
 function ec_show_events_list_html(){
 	include_once(EVENTSCALENDARCLASSPATH.DS."bdpress/header.php");
@@ -74,6 +74,6 @@ function ec_show_events_editor_html(){
 	include_once(EVENTSCALENDARCLASSPATH.DS."bdpress/header.php");
 
 	$calendar = new EC_Management();
-	$calendar->addEventForm();
+	$calendar->display();
 }
 ?>
