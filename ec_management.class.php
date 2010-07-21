@@ -372,7 +372,6 @@ class EC_Management {
         <input type="submit" name="submit" value="<?php _e('Add Event','events-calendar'); ?> &raquo;">
       </p>
     </form>
-    </div>
     <script language="javascript">
     // <![CDATA[
       function ec_parse_float(valtime) {
