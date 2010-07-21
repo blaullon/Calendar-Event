@@ -320,10 +320,16 @@ class EC_DB {
 	 * @return array 
 	 */
 	function getDaysEvents($d) {
+		global $bp;
+		if(isset($bp)){
+			$user_id=$bp->displayed_user->id;
+			$where="user_id={$user_id} AND ";
+		}
+
 		$sql = "SELECT *"
 		 	. "  FROM `$this->mainTable`"
-		  	. " WHERE `eventStartDate` <= '$d'"
-			. "   AND `eventEndDate` >= '$d'"
+		  	. " WHERE {$where} ( `eventStartDate` <= '$d'"
+			. "   AND `eventEndDate` >= '$d' )"
 			. " ORDER BY `eventStartTime`, `eventEndTime`;";
 		return $this->db->get_results($sql);
 	}
@@ -345,12 +351,20 @@ class EC_DB {
 	 * @return array
 	 */
 	function getUpcomingEvents($num = 5) {
+		global $bp;
+		if(isset($bp)){
+			$user_id=$bp->displayed_user->id;
+			$where="user_id={$user_id} AND ";
+		}
+	
 		$dt = date('Y-m-d');
 		$sql = "SELECT *"
 			. "  FROM `$this->mainTable`"
-			. " WHERE `eventStartDate` >= '$dt'"
-			. "    OR `eventEndDate` >= '$dt'"
+			. " WHERE {$where}"
+			. " ( `eventStartDate` >= '$dt'"
+			. "    OR `eventEndDate` >= '$dt' ) "
 			. " ORDER BY eventStartDate, eventStartTime LIMIT $num";
+					
 		return $this->db->get_results($sql);
 	}
 

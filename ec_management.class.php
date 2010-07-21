@@ -176,8 +176,8 @@ class EC_Management {
 			  $results = $this->db->getLatestPost();
 			  $postID = $results[0]->id;
 			}
-			$user_id = 25;
-			$this->addEvent($user_id, $title, $location, $eventType, $linkout, $description, $startDate, $startTime, $endDate, $endTime, $accessLevel, $postID);
+			$current_user = wp_get_current_user();
+			$this->addEvent($current_user->ID, $title, $location, $eventType, $linkout, $description, $startDate, $startTime, $endDate, $endTime, $accessLevel, $postID);
 
 			$splitDate = split("-", $startDate);
 			$this->month = $splitDate[1];
@@ -247,8 +247,8 @@ class EC_Management {
 	 * @param int    $postID	associated post id if available.
 	 */
 	function addEvent($user_id, $title, $location, $eventType, $linkout, $description, $startDate, $startTime, $endDate, $endTime, $accessLevel, $postID) {
-		$user_id = 56;
-		$this->db->addEvent($user_id, $title, $location, $eventType, $linkout, $description, $startDate, $startTime, $endDate, $endTime, $accessLevel, $postID);
+			$current_user = wp_get_current_user();
+		$this->db->addEvent($current_user->ID, $title, $location, $eventType, $linkout, $description, $startDate, $startTime, $endDate, $endTime, $accessLevel, $postID);
 		return;
 	}
 
