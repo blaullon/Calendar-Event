@@ -28,7 +28,7 @@ function ec_bp_setup_nav(){
 									'slug' => 'evento_nuevo',
 									'parent_url' => $events_link, 
 									'parent_slug' => 'eventos', 
-									'screen_function' => 'ec_show_events_calendar', 
+									'screen_function' => 'ec_show_events_editor', 
 									'user_has_access' => bp_is_my_profile(),
 									'position' => 30  ) );
 
@@ -43,6 +43,11 @@ function ec_show_events_calendar(){
 function ec_show_events_list(){
 	bp_core_load_template('members/single/home');
 	add_action( 'bp_before_member_body' , 'ec_show_events_list_html');
+}
+
+function ec_show_events_editor(){
+	bp_core_load_template('members/single/home');
+	add_action( 'bp_before_member_body' , 'ec_show_events_editor_html');
 }
 
 function ec_show_events_calendar_html(){
@@ -63,5 +68,12 @@ function ec_show_events_list_html(){
 
 	$calendar = new EC_Calendar();
 	$calendar->displayEventList(5);
+}
+
+function ec_show_events_editor_html(){
+	include_once(EVENTSCALENDARCLASSPATH.DS."bdpress/header.php");
+
+	$calendar = new EC_Management();
+	$calendar->addEventForm();
 }
 ?>
