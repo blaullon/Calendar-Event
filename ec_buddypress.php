@@ -3,7 +3,7 @@ add_action( 'bp_setup_nav', 'ec_bp_setup_nav' );
 
 function ec_bp_setup_nav(){
 	global $bp;
-	$events_link = $bp->loggedin_user->domain . 'eventos/';
+	$events_link = $bp->displayed_user->domain . 'eventos/';
 
 	bp_core_new_nav_item( array( 'name' => 'Eventos', 
 								 'slug' => 'eventos', 
