@@ -72,6 +72,7 @@ require_once(EVENTSCALENDARCLASSPATH.DS.'ec_calendar.class.php');
 require_once(EVENTSCALENDARCLASSPATH.DS.'ec_db.class.php');
 require_once(EVENTSCALENDARCLASSPATH.DS.'ec_widget.class.php');
 require_once(EVENTSCALENDARCLASSPATH.DS.'ec_management.class.php');
+require_once(EVENTSCALENDARCLASSPATH.DS.'ec_buddypress.php');
 
 /** Init Localisation */
 load_default_textdomain();
