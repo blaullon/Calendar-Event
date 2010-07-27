@@ -61,7 +61,7 @@ define('EVENTSCALENDARCLASSPATH', EVENTSCALENDARPATH);
 define('ABSWPINCLUDE', ABSPATH.WPINC);
 
 // URLS
-define('EVENTSCALENDARURL', get_option('siteurl').'/wp-content/plugins/events-calendar');
+define('EVENTSCALENDARURL', get_option('siteurl').'/wp-content/plugins/Calendar-Event');
 define('EVENTSCALENDARJSURL', EVENTSCALENDARURL.'/js');
 define('EVENTSCALENDARCSSURL', EVENTSCALENDARURL.'/css');
 define('EVENTSCALENDARIMAGESURL', EVENTSCALENDARURL.'/images');
