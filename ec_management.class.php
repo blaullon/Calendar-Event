@@ -176,8 +176,8 @@ class EC_Management {
 			  $results = $this->db->getLatestPost();
 			  $postID = $results[0]->id;
 			}
-			$user_id = 25;
-			$this->addEvent($user_id, $title, $location, $eventType, $linkout, $description, $startDate, $startTime, $endDate, $endTime, $accessLevel, $postID);
+			$current_user = wp_get_current_user();
+			$this->addEvent($current_user->ID, $title, $location, $eventType, $linkout, $description, $startDate, $startTime, $endDate, $endTime, $accessLevel, $postID);
 
 			$splitDate = split("-", $startDate);
 			$this->month = $splitDate[1];
@@ -227,30 +227,11 @@ class EC_Management {
 		else {
 			$this->calendar->displayAdmin($this->year, $this->month);
 			$js->calendarData($this->month, $this->year);
-			$this->addEventForm();
+			//$this->addEventForm();
 		}
 	}
 
-	/**
-	 * Adds a new event to the database.
-	 *
-	 * @param string $title		title of the event.
-	 * @param string $location	location of the event.
-	 * @param string $linkout	either a user provided URL or a link to the
-	 * 				associated post if a post was published.
-	 * @param string $startDate 	starting date of the event.
-	 * @param string $startTime	starting time of the event. Optional.
-	 * @param string $endDate	ending date of the event. If not provided, ewill be
-	 *				the same as starting date.
-	 * @param string $endTime	ending time of the event. 
-	 * @param int    $accessLevel	who can access this event.
-	 * @param int    $postID	associated post id if available.
-	 */
-	function addEvent($user_id, $title, $location, $eventType, $linkout, $description, $startDate, $startTime, $endDate, $endTime, $accessLevel, $postID) {
-		$user_id = 56;
-		$this->db->addEvent($user_id, $title, $location, $eventType, $linkout, $description, $startDate, $startTime, $endDate, $endTime, $accessLevel, $postID);
-		return;
-	}
+	
 
 	/**
 	 * Updates an already existing event in the database.
@@ -271,79 +252,6 @@ class EC_Management {
 		$this->db->editEvent($id, $title, $location, $linkout, $description, $eventType, $startDate, $startTime, $endDate, $endTime, $accessLevel, $postID);
 	}
 
-	/**
-	 * Outputs the Add Event form.
-	 *
-	 * Provides the HTML and Javascript necessary for the user to add and validate a new event.
-	 */
-	function addEventForm() {
-?>
-	
-    </div>
-    <script language="javascript">
-    // <![CDATA[
-      function ec_parse_float(valtime) {
-// var idx = valtime.indexOf(":");
-        var hr = valtime.substr(0,2);
-        var mm = valtime.substr(3,2);
-        return parseFloat(hr+"."+mm);
-      }
-      function valid_addEventForm() {
-        if (document.forms.EC_addEventForm.EC_title.value=="") {
-          alertmsgbox("<?php _e('Event Title can not be blank!','events-calendar'); ?>");
-          document.forms.EC_addEventForm.EC_title.focus();
-          return false;
-        }
-			
-        var stt = ec_parse_float(document.forms.EC_addEventForm.EC_startTime.value);
-		  var edt = ec_parse_float(document.forms.EC_addEventForm.EC_endTime.value);
-		  var startDt =            document.forms.EC_addEventForm.EC_startDate.value;
-		  var endDt =              document.forms.EC_addEventForm.EC_endDate.value;
-
-		  if (endDt == null || endDt == undefined || endDt == '')
-				endDt = startDt;
-
-        if (endDt < startDt) {
-			  alertmsgbox("<?php _e('The end date is earlier than the start date.', 'events-calendar');?>");
-			  document.forms.EC_addEventForm.EC_endDate.focus();
-           return false;
-		  }
-
-        if (startDt == endDt && edt < stt) {
-          alertmsgbox("<?php _e('The end time is earlier than the start time ;-)','events-calendar'); ?>");
-          document.forms.EC_addEventForm.EC_endTime.focus();
-          return false;
-        }
-      }
-      //jQuery.noConflict();
-      function alertmsgbox(msg) {
-        jQuery("#EC_alertmsg p").text(msg);
-        jQuery("#EC_alertmsg").show();
-        jQuery("#EC_alertmsg").animate({ top: "885px" }, 0 ).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
-      }
-      jQuery("form[name='EC_addEventForm']").ready(function(){
-          if (jQuery("#EC_doPost").is(":checked")) {
-            jQuery("#showSelectStatusPost").show("slow");
-          } else {
-            jQuery("#showSelectStatusPost").hide("slow");
-          }
-      });
-      jQuery("#EC_doPost").click(function(){
-          if (jQuery("#EC_doPost").is(":checked")) {
-            jQuery("#showSelectStatusPost").show("slow");
-          } else {
-            jQuery("#showSelectStatusPost").hide("slow");
-          }
-      });
-      jQuery(document).ready(function() {
-          jQuery("#EC_close_message_alert").click(function() {
-              jQuery("#EC_alertmsg").fadeOut("slow");
-          });
-          jQuery("#EC_alertmsg").hide();
-      });
-    //]]>
-    </script>
-<?php
 	}
 
 	/**
@@ -725,7 +633,7 @@ class EC_Management {
     //]]>
     </script>
 <?php
-  }
+  
 }
 endif;
 ?>
