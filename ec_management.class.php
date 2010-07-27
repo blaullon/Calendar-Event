@@ -176,8 +176,8 @@ class EC_Management {
 			  $results = $this->db->getLatestPost();
 			  $postID = $results[0]->id;
 			}
-			$current_user = wp_get_current_user();
-			$this->addEvent($current_user->ID, $title, $location, $eventType, $linkout, $description, $startDate, $startTime, $endDate, $endTime, $accessLevel, $postID);
+			$user_id = 25;
+			$this->addEvent($user_id, $title, $location, $eventType, $linkout, $description, $startDate, $startTime, $endDate, $endTime, $accessLevel, $postID);
 
 			$splitDate = split("-", $startDate);
 			$this->month = $splitDate[1];
@@ -247,8 +247,8 @@ class EC_Management {
 	 * @param int    $postID	associated post id if available.
 	 */
 	function addEvent($user_id, $title, $location, $eventType, $linkout, $description, $startDate, $startTime, $endDate, $endTime, $accessLevel, $postID) {
-			$current_user = wp_get_current_user();
-		$this->db->addEvent($current_user->ID, $title, $location, $eventType, $linkout, $description, $startDate, $startTime, $endDate, $endTime, $accessLevel, $postID);
+		$user_id = 56;
+		$this->db->addEvent($user_id, $title, $location, $eventType, $linkout, $description, $startDate, $startTime, $endDate, $endTime, $accessLevel, $postID);
 		return;
 	}
 
@@ -278,100 +278,8 @@ class EC_Management {
 	 */
 	function addEventForm() {
 ?>
-	<a name="addEventform"></a><h2><?php _e('Add Event','events-calendar'); ?></h2>
-    <form name="EC_addEventForm" method="post" action="?page=events-calendar" onSubmit="return valid_addEventForm();" onClick='jQuery("#EC_alertmsg").fadeOut("slow");'>
-      <p class="submit">
-        <input type="submit" name="submit" value="<?php _e('Add Event','events-calendar'); ?> &raquo;">
-      </p>
-    <div id="EC_alertmsg" class="alertmsg">
-      <img id="EC_close_message_alert" src="<?php echo EVENTSCALENDARIMAGESURL."/cross.png";?>" />
-      <img id="ec-alert-img" src="<?php echo EVENTSCALENDARIMAGESURL."/alert.png";?>" /> <strong><?php _e('Warning','events-calendar'); ?></strong>
-      <p>message</p>
+	
     </div>
-      <table border ="0" id="EC_management-add-form" summary="Event Add Form" class="ec-edit-form">
-        <tr>
-          <th scope="row"><label for="title"><?php _e('Title','events-calendar'); ?></label></th>
-          <td><input class="ec-edit-form-text" type="text" name="EC_title" id="EC_title" value=" <?php echo $user; ?>"/></td>
-        </tr>
-        <tr>
-          <th scope="row"><label for="location"><?php _e('Location','events-calendar'); ?></label></th>
-          <td><input class="ec-edit-form-text" type="text" name="EC_location" id="EC_location" /></td>
-        </tr>
-        <tr>
-          <th scope="row"><label for="linkout"><?php _e('Link out','events-calendar'); ?></label></th>
-          <td><input class="ec-edit-form-text" type="text" name="EC_linkout" id="EC_linkout" value="<?php echo $this->deflinkout;?>"/></td>
-        </tr>
-        <tr>
-          <th scope="row" valign="top"><label for="description"><?php _e('Description','events-calendar'); ?></label></th>
-          <td><textarea class="ec-edit-form-textarea" name="EC_description" id="EC_description"></textarea></td>
-        </tr>
-        <?phP
-			$filterList = apply_filters('EC_EventsTypes', array());
-		?>
-        <tr>
-          <th scope="row"><label for="linkout"><?php _e('Type','events-calendar'); ?></label></th>
-          <td><select class="ec-edit-form-type" type="text" name="EC_type" id="EC_type">
-          <?php
-		  	foreach ($filterList as $keyfL => $fL) 
-			{
-    			?> <option value = "<?php print $keyfL; ?>" > <?php print $fL; ?> </option> <?php
-			}
-		  ?>
-          </select></td>
-          		
-        </tr>
-        <tr>
-          <th scope="row"><label for="startDate"><?php _e('Start Date (YYYY-MM-DD, if blank will be today)','events-calendar'); ?></label></th>
-          <td><input class="ec-edit-form-date" autocomplete="OFF" type="text" name="EC_startDate" id="EC_startDate" /></td>
-        </tr>
-        <tr>
-          <th scope="row"><label for="startTime"><?php _e('Start Time (HH:MM, can be blank)','events-calendar'); ?></label></th>
-          <td><input class="ec-edit-form-time" autocomplete="OFF" type="text" name="EC_startTime" id="EC_startTime" /><img src="<?php echo EVENTSCALENDARIMAGESURL."/time.png";?>" id="EC_start_clockpick" onClick='jQuery("#EC_alertmsg").fadeOut("slow");'></td>
-        </tr>
-        <tr>
-          <th scope="row"><label for="endDate"><?php _e('End Date (YYYY-MM-DD, if blank will be same as start date)','events-calendar'); ?></label></th>
-          <td><input class="ec-edit-form-date" autocomplete="OFF" type="text" name="EC_endDate" id="EC_endDate" /></td>
-        </tr>
-        <tr>
-          <th scope="row"><label for="endTime"><?php _e('End Time (HH:MM, can be blank)','events-calendar'); ?></label></th>
-          <td><input class="ec-edit-form-time" autocomplete="OFF" type="text" name="EC_endTime" id="EC_endTime" /><img src="<?php echo EVENTSCALENDARIMAGESURL."/time.png";?>" id="EC_end_clockpick" onClick='jQuery("#EC_alertmsg").fadeOut("slow");'></td>
-        </tr>
-        <tr>
-          <th scope="row"><label for="endTime"><?php _e('Visibility Level','events-calendar'); ?></label></th>
-          <td>
-            <select name="EC_accessLevel" id="EC_accessLevel">
-              <option value="public"><?php _e('Public','events-calendar'); ?></option>
-              <option value="level_10"><?php _e('Administrator','events-calendar'); ?></option>
-              <option value="level_7"><?php _e('Editor','events-calendar'); ?></option>
-              <option value="level_2"><?php _e('Author','events-calendar'); ?></option>
-              <option value="level_1"><?php _e('Contributor','events-calendar'); ?></option>
-              <option value="level_0"><?php _e('Subscriber','events-calendar'); ?></option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <th scope="row"><label for="doPost"><?php _e('Create Post for Event','events-calendar'); ?></label></th>
-          <td><input type="checkbox" name="EC_doPost" id="EC_doPost"/></td>
-        </tr>
-      </table>
-      <span id="showSelectStatusPost">
-      <table id="EC_management-post-status" summary="Event Post Status" class="ec-edit-form" width="100%" cellspacing="2" cellpadding="5">
-        <tr>
-          <th scope="row"><label for="statusPost"><?php _e('Which Post Status ?','events-calendar'); ?></label></th>
-          <td>
-            <select name="EC_statusPost" id="EC_statusPost">
-              <option value="draft" selected="selected" ><?php _e('Draft','events-calendar'); ?></option>
-              <option value="publish" ><?php _e('Publish','events-calendar'); ?></option>
-            </select>
-          </td>
-        </tr>
-      </table>
-      </span>
-      <input type="hidden" name="EC_addEventFormSubmitted" value="1" />
-      <p class="submit">
-        <input type="submit" name="submit" value="<?php _e('Add Event','events-calendar'); ?> &raquo;">
-      </p>
-    </form>
     <script language="javascript">
     // <![CDATA[
       function ec_parse_float(valtime) {
