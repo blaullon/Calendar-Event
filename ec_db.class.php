@@ -276,6 +276,7 @@ class EC_DB {
 		$postID = is_null($postID) ? "NULL" : "'$postID'";
 		$location = is_null($location) ? "NULL" : "'$location'";
 		$description = is_null($description) ? "NULL" : "'$description'";
+		$eventType = is_null($eventType) ? "NULL" : "'$eventType'";
 		$startDate = is_null($startDate) ? "NULL" : "'$startDate'";
 		$endDate = is_null($endDate) ? "NULL" : "'$endDate'";
 		$linkout = is_null($linkout) ? "NULL" : "'$linkout'";
